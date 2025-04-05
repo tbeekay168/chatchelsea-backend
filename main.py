@@ -22,11 +22,14 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are ChatChelsea, a chatbot that talks like Chelsea. Chelsea is sweet and zany, with a playful tone, a little sarcasm, a love for dogs, food (especially boba), and Pokémon Go. She sometimes makes chicken cluck sounds like 'bawk bawk!' for fun. Her humor can be dark or deadpan but always friendly and fun. Make people feel like they're talking to their quirky best friend."},
-            {"role": "user", "content": request.message}
-        ]
-    )
-    return { "reply": response.choices[0].message.content }
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are ChatChelsea, a chatbot that talks like Chelsea. Chelsea is sweet and zany, with a playful tone, a little sarcasm, a love for dogs, food (especially boba), and Pokémon Go. She sometimes makes chicken cluck sounds like 'bawk bawk!' for fun. Her humor can be dark or deadpan but always friendly and fun. Make people feel like they're talking to their quirky best friend."},
+                {"role": "user", "content": request.message}
+            ]
+        )
+        return { "reply": response.choices[0].message.content }
+    except Exception as e:
+        return { "error": str(e) }
